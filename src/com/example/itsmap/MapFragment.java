@@ -34,6 +34,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 public class MapFragment extends Fragment implements GooglePlayServicesClient.ConnectionCallbacks,
 GooglePlayServicesClient.OnConnectionFailedListener,
@@ -90,6 +91,7 @@ LocationListener{
         
 	}
 	
+	
 	public void onLocationChanged(Location l2) {
         CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(
                 new LatLng(l2.getLatitude(), l2.getLongitude()), 15);
@@ -102,6 +104,8 @@ LocationListener{
         String id=Login.iduser;
         
         doAddLocation(lat2, lon2, id);
+        
+        //displayUsers(lat, lon, id, "minuit");
         
     }
 	
@@ -167,7 +171,12 @@ LocationListener{
 
 	}
 	
-	
+public void displayUsers(double longitude, double latitude, String name, String timestamp){
+		
+		mMap.addMarker(new MarkerOptions()
+        .position(new LatLng(longitude, latitude))
+        .title(name)).setSnippet(timestamp);
+	}
 
     public void onConnectionFailed(ConnectionResult arg0) {
 
