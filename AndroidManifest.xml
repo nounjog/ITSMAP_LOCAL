@@ -47,11 +47,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.example.itsmap.Login" >
+        <activity android:name="com.example.itsmap.UserManager.Login" >
         </activity>
-        <activity android:name="com.example.itsmap.AddUser" >
+        <activity android:name="com.example.itsmap.UserManager.AddUser" >
         </activity>
-        <activity android:name="com.example.itsmap.ContentActivity" >
+        <activity android:name="com.example.itsmap.ContentProdiver.ContentActivity" >
         </activity>
 
         <!-- Google API Key -->
@@ -68,16 +68,6 @@
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
 
-        <service
-            android:name="com.example.itsmap.GetUsersLocations"
-            android:enabled="true"
-            android:exported="true" >
-        </service>
-        <service
-            android:name="com.example.itsmap.GetUsersService"
-            android:enabled="true"
-            android:exported="true" >
-        </service>
     </application>
 
 </manifest>

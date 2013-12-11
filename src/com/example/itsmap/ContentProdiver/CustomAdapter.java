@@ -1,6 +1,11 @@
-package com.example.itsmap;
+package com.example.itsmap.ContentProdiver;
 
 import java.util.ArrayList;
+
+import com.example.itsmap.R;
+import com.example.itsmap.Friend.Friend;
+import com.example.itsmap.R.id;
+import com.example.itsmap.R.layout;
 
 import android.content.Context;
 import android.util.Log;

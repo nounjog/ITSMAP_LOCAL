@@ -1,4 +1,4 @@
-package com.example.itsmap;
+package com.example.itsmap.Friend;
 
 public class Friend {
 	

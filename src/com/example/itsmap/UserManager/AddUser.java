@@ -1,4 +1,4 @@
-package com.example.itsmap;
+package com.example.itsmap.UserManager;
 
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -14,6 +14,11 @@ import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.protocol.HTTP;
 
+import com.example.itsmap.MainActivity;
+import com.example.itsmap.R;
+import com.example.itsmap.R.id;
+import com.example.itsmap.R.layout;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -26,11 +31,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-public class Login extends Activity {
+public class AddUser extends Activity {
 
-	private static final String UPDATE_URL = "http://pierrelt.fr/ITSMAP/login.php";
-	
-	public static String iduser="";
+	private static final String UPDATE_URL = "http://pierrelt.fr/ITSMAP/adduser.php";
 
 	public ProgressDialog progressDialog;
 
@@ -39,21 +42,9 @@ public class Login extends Activity {
 	private EditText PassEditText;
 
 	public void onCreate(Bundle savedInstanceState) {
-		Log.i("Login", "OnCreate");
+
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_main);
-
-		Button createbutton = (Button) findViewById(R.id.createbutton);
-
-		createbutton.setOnClickListener(new View.OnClickListener() {
-
-			public void onClick(View v) {
-
-				Intent intent = new Intent(Login.this, AddUser.class);
-				startActivity(intent);
-			}
-
-		});
+		setContentView(R.layout.add_user);
 
 		// initialisation d'une progress bar
 		progressDialog = new ProgressDialog(this);
@@ -61,31 +52,32 @@ public class Login extends Activity {
 		progressDialog.setIndeterminate(true);
 		progressDialog.setCancelable(false);
 		// Récupération des éléments de la vue définis dans le xml
-		UserEditText = (EditText) findViewById(R.id.username);
+		UserEditText = (EditText) findViewById(R.id.newusername);
 
-		PassEditText = (EditText) findViewById(R.id.password);
+		PassEditText = (EditText) findViewById(R.id.newpassword);
 
-		Button button = (Button) findViewById(R.id.okbutton);
+		Button button = (Button) findViewById(R.id.adduserbutton);
 
 		// Définition du listener du bouton
 		button.setOnClickListener(new View.OnClickListener() {
 
 			public void onClick(View v) {
 
-				int usersize = UserEditText.getText().length();
+				int newusersize = UserEditText.getText().length();
 
-				int passsize = PassEditText.getText().length();
+				int newpasssize = PassEditText.getText().length();
 				// si les deux champs sont remplis
-				if (usersize > 0 && passsize > 0) {
+				if (newusersize > 0 && newpasssize > 0) {
 
 					progressDialog.show();
 
-					String user = UserEditText.getText().toString();
+					String newuser = UserEditText.getText().toString();
 
-					String pass = PassEditText.getText().toString();
-					// On appelle la fonction doLogin qui va communiquer avec le
+					String newpass = PassEditText.getText().toString();
+					// On appelle la fonction doLogin qui va communiquer
+					// avec le
 					// PHP
-					doLogin(user, pass);
+					doAddUser(newuser, newpass);
 
 				} else
 					createDialog("Error", "Please enter Username and Password");
@@ -93,23 +85,6 @@ public class Login extends Activity {
 			}
 
 		});
-
-		button = (Button) findViewById(R.id.cancelbutton);
-		// Création du listener du bouton cancel (on sort de l'appli)
-		button.setOnClickListener(new View.OnClickListener() {
-
-			public void onClick(View v) {
-				quit(false, null);
-			}
-
-		});
-
-	}
-
-	private void quit(boolean success, Intent i) {
-		// On envoie un résultat qui va permettre de quitter l'appli
-		setResult((success) ? Activity.RESULT_OK : Activity.RESULT_CANCELED, i);
-		finish();
 
 	}
 
@@ -122,7 +97,7 @@ public class Login extends Activity {
 
 	}
 
-	private void doLogin(final String login, final String pass) {
+	private void doAddUser(final String login, final String pass) {
 
 		// final String pw = md5(pass);
 		// Création d'un thread
@@ -186,34 +161,31 @@ public class Login extends Activity {
 
 	}
 
+	
+
 	private void read(InputStream in) {
 
 		Log.i("Quest cest que j'ai", in.toString());
 
-		iduser = convertStreamToString(in);
+		String string = convertStreamToString(in);
 
-		Log.i("reponse", iduser);
-		
-		int y = Integer.parseInt(iduser);
-		if (y!=0) {
+		Log.i("reponse", string);
 
-			// Prepare data intent
-			Intent data = new Intent();
-			data.putExtra("returnKey1", "ConnectionOk ");
-			// Activity finished ok, return the data
-			setResult(RESULT_CANCELED, data);
-			super.finish();
-		} else {
-			Toast.makeText(getApplicationContext(), "Connection failed",
-					Toast.LENGTH_SHORT).show();
+		if (string.toString().equalsIgnoreCase("OK")) {
 			
-			Intent intent= new Intent(Login.this, MainActivity.class);
+			Toast.makeText(getApplicationContext(), "Inscription success",
+					Toast.LENGTH_SHORT).show();
+
+			Intent intent = new Intent(AddUser.this, MainActivity.class);
 			startActivity(intent);
+
+		} else {
+			Toast.makeText(getApplicationContext(), "Inscription Failed",
+					Toast.LENGTH_SHORT).show();
 
 		}
 
 	}
-
 	static String convertStreamToString(java.io.InputStream is) {
 		java.util.Scanner s = new java.util.Scanner(is).useDelimiter("\\A");
 		return s.hasNext() ? s.next() : "";

@@ -1,4 +1,7 @@
-package com.example.itsmap;
+package com.example.itsmap.Friend;
+
+import com.example.itsmap.R;
+import com.example.itsmap.R.layout;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;

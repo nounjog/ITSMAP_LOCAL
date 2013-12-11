@@ -1,5 +1,8 @@
 package com.example.itsmap;
 
+import com.example.itsmap.ContentProdiver.ContentActivity;
+import com.example.itsmap.UserManager.Login;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;

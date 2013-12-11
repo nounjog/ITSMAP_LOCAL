@@ -1,4 +1,8 @@
-package com.example.itsmap;
+package com.example.itsmap.ContentProdiver;
+
+import com.example.itsmap.R;
+import com.example.itsmap.R.id;
+import com.example.itsmap.R.layout;
 
 import android.annotation.SuppressLint;
 import android.app.ActionBar;

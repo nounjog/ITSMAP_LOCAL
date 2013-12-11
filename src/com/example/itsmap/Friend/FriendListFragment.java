@@ -1,6 +1,10 @@
-package com.example.itsmap;
+package com.example.itsmap.Friend;
 
 import java.util.ArrayList;
+
+import com.example.itsmap.R;
+import com.example.itsmap.ContentProdiver.CustomAdapter;
+import com.example.itsmap.R.layout;
 
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;

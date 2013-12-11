@@ -1,4 +1,8 @@
-package com.example.itsmap;
+package com.example.itsmap.ContentProdiver;
+
+import com.example.itsmap.Friend.AddFriendFragment;
+import com.example.itsmap.Friend.FriendListFragment;
+import com.example.itsmap.Map.MapFragment;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;

@@ -1,6 +1,8 @@
-package com.example.itsmap;
+package com.example.itsmap.Friend;
 
 import java.util.ArrayList;
+
+import com.example.itsmap.MySQLiteOpenHelper;
 
 import android.content.ContentValues;
 import android.content.Context;
