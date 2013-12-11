@@ -29,6 +29,8 @@ import android.widget.Toast;
 public class Login extends Activity {
 
 	private static final String UPDATE_URL = "http://pierrelt.fr/ITSMAP/login.php";
+	
+	public static String iduser="";
 
 	public ProgressDialog progressDialog;
 
@@ -188,11 +190,11 @@ public class Login extends Activity {
 
 		Log.i("Quest cest que j'ai", in.toString());
 
-		String string = convertStreamToString(in);
+		iduser = convertStreamToString(in);
 
-		Log.i("reponse", string);
+		Log.i("reponse", iduser);
 		
-		int y = Integer.parseInt(string);
+		int y = Integer.parseInt(iduser);
 		if (y!=0) {
 
 			// Prepare data intent

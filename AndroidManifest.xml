@@ -58,18 +58,15 @@
         <!-- Google API Key -->
         <!-- Thomas =  AIzaSyC-M0faHO_erjQrO8wqv2ZGOE5ekE41DJA -->
         <!-- Kasperi = AIzaSyAq1H6UCw3L8n_NfH-9PTN6t5G9oa9Fi_M -->
+        <!-- Pierre = AIzaSyDZewU4j7pmhprtbxkOcCu6p6arlffn2VE -->
+        
         <!-- MUST UNINSTALL APP OR WIPE USER DATA IF APIKEY VALUE IS CHANGED -->
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
-            android:value="AIzaSyC-M0faHO_erjQrO8wqv2ZGOE5ekE41DJA" />
+            android:value="AIzaSyDZewU4j7pmhprtbxkOcCu6p6arlffn2VE" />
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
-
-        <activity
-            android:name="com.example.itsmap.TestMap"
-            android:label="@string/title_activity_test_map" >
-        </activity>
     </application>
 
 </manifest>

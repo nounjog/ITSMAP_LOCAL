@@ -1,8 +1,23 @@
 package com.example.itsmap;
 
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.params.HttpConnectionParams;
+import org.apache.http.protocol.HTTP;
+
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.Looper;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -25,6 +40,7 @@ GooglePlayServicesClient.OnConnectionFailedListener,
 LocationListener{
 
 	private static final String TAG = "MapFragment";
+	private static final String UPDATE_URL = "http://pierrelt.fr/ITSMAP/location.php";
 	
     private static final String MAP_FRAGMENT_TAG = "map";
     private GoogleMap mMap;
@@ -77,8 +93,81 @@ LocationListener{
 	public void onLocationChanged(Location l2) {
         CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(
                 new LatLng(l2.getLatitude(), l2.getLongitude()), 15);
+        double lat=l2.getLatitude();
+        double lon=l2.getLongitude();
+        String lat2 = String.valueOf(lat);
+        String lon2 = String.valueOf(lon);
         mMap.animateCamera(cameraUpdate);
+        
+        String id=Login.iduser;
+        
+        doAddLocation(lat2, lon2, id);
+        
     }
+	
+	private void doAddLocation(final String latitude, final String longitude, final String id) {
+
+		// final String pw = md5(pass);
+		// Création d'un thread
+		Thread t = new Thread() {
+
+			public void run() {
+
+				Looper.prepare();
+				// On se connecte au serveur afin de communiquer avec le PHP
+				DefaultHttpClient client = new DefaultHttpClient();
+				HttpConnectionParams.setConnectionTimeout(client.getParams(),
+						15000);
+
+				HttpResponse response;
+				HttpEntity entity;
+
+				try {
+					// On établit un lien avec le script PHP
+					HttpPost post = new HttpPost(UPDATE_URL);
+
+					List<NameValuePair> nvps = new ArrayList<NameValuePair>();
+
+					nvps.add(new BasicNameValuePair("id", id));
+					
+					nvps.add(new BasicNameValuePair("lon", longitude));
+
+					nvps.add(new BasicNameValuePair("lat", latitude));
+
+					post.setHeader("Content-Type",
+							"application/x-www-form-urlencoded");
+					// On passe les paramètres login et password qui vont être
+					// récupérés
+					// par le script PHP en post
+					post.setEntity(new UrlEncodedFormEntity(nvps, HTTP.UTF_8));
+					// On récupère le résultat du script
+					response = client.execute(post);
+
+					entity = response.getEntity();
+
+					InputStream is = entity.getContent();
+					// On appelle une fonction définie plus bas pour traduire la
+					// réponse
+					is.close();
+
+					if (entity != null)
+						entity.consumeContent();
+
+				} catch (Exception e) {
+
+				}
+
+				Looper.loop();
+
+			}
+
+		};
+
+		t.start();
+
+	}
+	
+	
 
     public void onConnectionFailed(ConnectionResult arg0) {
 

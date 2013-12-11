@@ -214,13 +214,12 @@ containing a value of this type.
         public static final int ic_plusone_tall_off_client=0x7f02001c;
     }
     public static final class id {
-        public static final int action_settings=0x7f060012;
+        public static final int action_settings=0x7f060011;
         public static final int adduserbutton=0x7f06000c;
         public static final int cancelbutton=0x7f060008;
         public static final int createbutton=0x7f060009;
         public static final int hybrid=0x7f060004;
         public static final int map=0x7f06000e;
-        public static final int map2=0x7f060011;
         public static final int name=0x7f06000f;
         public static final int newpassword=0x7f06000b;
         public static final int newusername=0x7f06000a;
@@ -246,7 +245,6 @@ containing a value of this type.
         public static final int fragment_map=0x7f030005;
         public static final int list_friendlist=0x7f030006;
         public static final int simple_list=0x7f030007;
-        public static final int test_map=0x7f030008;
     }
     public static final class menu {
         public static final int main=0x7f0c0000;
