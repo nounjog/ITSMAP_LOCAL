@@ -151,19 +151,7 @@ LocationListener{
 					// On appelle une fonction définie plus bas pour traduire la
 					// réponse
 					
-					JSONArray jArray = new JSONArray(Login.convertStreamToString(is));
-					JSONObject tm = (JSONObject) jArray.get(0);
-					tm.get("time").toString();
-
-					  for (int i=1;i<jArray.length();i++){ 
-							JSONObject tmp = (JSONObject) jArray.get(i);
-							String val = tmp.get("name").toString();
-							double lon = Double.parseDouble(tmp.get("longitude").toString());
-							double lat = Double.parseDouble(tmp.get("latitude").toString());
-							
-							String time = "DANS LE FUTUR";
-
-					  }
+					
 					is.close();
 					
 
