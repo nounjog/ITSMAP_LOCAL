@@ -13,6 +13,8 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.protocol.HTTP;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import android.location.Location;
 import android.location.LocationManager;
@@ -136,19 +138,31 @@ LocationListener{
 
 					post.setHeader("Content-Type",
 							"application/x-www-form-urlencoded");
-					// On passe les paramètres login et password qui vont être
-					// récupérés
-					// par le script PHP en post
+				
 					post.setEntity(new UrlEncodedFormEntity(nvps, HTTP.UTF_8));
-					// On récupère le résultat du script
 					response = client.execute(post);
-
 					entity = response.getEntity();
 
 					InputStream is = entity.getContent();
 					// On appelle une fonction définie plus bas pour traduire la
 					// réponse
+					
+					JSONArray jArray = new JSONArray(Login.convertStreamToString(is));
+					JSONObject tm = (JSONObject) jArray.get(0);
+					tm.get("time").toString();
+
+					  for (int i=1;i<jArray.length();i++){ 
+							JSONObject tmp = (JSONObject) jArray.get(i);
+							String val = tmp.get("name").toString();
+							double lon = Double.parseDouble(tmp.get("longitude").toString());
+							double lat = Double.parseDouble(tmp.get("latitude").toString());
+							
+							String time = "DANS LE FUTUR";
+
+					  }
 					is.close();
+					
+
 
 					if (entity != null)
 						entity.consumeContent();
