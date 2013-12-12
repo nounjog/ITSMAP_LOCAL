@@ -35,12 +35,25 @@ public class AddFriendFragment extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
+		new GetUser().execute("http://pierrelt.fr/ITSMAP/getUser.php?id="+Login.iduser);
 
 		View rootView = inflater.inflate(R.layout.fragment_addfriend, container, false);
-		new GetUser().execute("http://pierrelt.fr/ITSMAP/getUser.php?id="+Login.iduser);
+		//new GetUser().execute("http://pierrelt.fr/ITSMAP/getUser.php?id="+Login.iduser);
 		return rootView;
 	}
 	
+	
+	
+	@Override
+	public void onActivityCreated(Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		super.onActivityCreated(savedInstanceState);
+		}
+		
+	
+
+
+
 	public void fill(String result){
 		int[] idArray;
 	   	JSONArray jArray = null;

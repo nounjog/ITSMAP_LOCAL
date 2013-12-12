@@ -29,7 +29,7 @@ public class DisplayService extends Service {
 
 	private GoogleMap mMap;
 	
-	/*@Override
+	@Override
 	public void onCreate() {
 		// TODO Auto-generated method stub
 		super.onCreate();
@@ -38,37 +38,6 @@ public class DisplayService extends Service {
 				+ Login.iduser);
 		
 		
-		final Handler handler = new Handler();
-		final Runnable runnable = new Runnable() {
-			@Override
-			public void run() {
-				Log.i("run", "OnCreate");
-				new GetLoc().execute("http://pierrelt.fr/ITSMAP/getLocation.php?id="
-						+ Login.iduser);
-			}
-		};
-		handler.postDelayed(runnable, 10000);
-		
-	}*/
-
-	@Override
-	public int onStartCommand(Intent intent, int flags, int startId) {
-		Log.i("OnCommand", "OnCreate");
-		new GetLoc().execute("http://pierrelt.fr/ITSMAP/getLocation.php?id="
-				+ Login.iduser);
-		
-		
-		/*final Handler handler = new Handler();
-		final Runnable runnable = new Runnable() {
-			@Override
-			public void run() {
-				Log.i("run", "OnCreate");
-				new GetLoc().execute("http://pierrelt.fr/ITSMAP/getLocation.php?id="
-						+ Login.iduser);
-			}
-		};
-		handler.postDelayed(runnable, 10000);*/
-		return START_STICKY;
 	}
 
 	public class GetLoc extends AsyncTask<String, String, String> {

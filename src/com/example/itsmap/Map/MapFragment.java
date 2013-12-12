@@ -109,7 +109,9 @@ public class MapFragment extends Fragment implements
 				handler.postDelayed(this, 10000);
 			}
 		};
-		handler.postDelayed(runnable, 10000);*/
+		handler.postDelayed(runnable, 10000);
+		
+		handler.removeCallbacks(runnable);*/
 
 	}
 	
@@ -244,6 +246,7 @@ public class MapFragment extends Fragment implements
 		Log.i("onPause", "OnCreate");
 		
 		super.onPause();
+		
 	}
 
 	@Override
