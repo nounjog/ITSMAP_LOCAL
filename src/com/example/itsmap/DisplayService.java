@@ -13,6 +13,7 @@ import org.json.JSONObject;
 import android.app.Service;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
 
@@ -20,8 +21,6 @@ import com.example.itsmap.Map.MapFragment;
 import com.example.itsmap.UserManager.Login;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 //import com.example.itsmap.Map.GetLoc;
 
 //import com.example.itsmap.Map.MapFragment.GetLoc;
@@ -29,16 +28,52 @@ import com.google.android.gms.maps.model.MarkerOptions;
 public class DisplayService extends Service {
 
 	private GoogleMap mMap;
+	
+	/*@Override
+	public void onCreate() {
+		// TODO Auto-generated method stub
+		super.onCreate();
+		Log.i("OnCommand", "OnCreate");
+		new GetLoc().execute("http://pierrelt.fr/ITSMAP/getLocation.php?id="
+				+ Login.iduser);
+		
+		
+		final Handler handler = new Handler();
+		final Runnable runnable = new Runnable() {
+			@Override
+			public void run() {
+				Log.i("run", "OnCreate");
+				new GetLoc().execute("http://pierrelt.fr/ITSMAP/getLocation.php?id="
+						+ Login.iduser);
+			}
+		};
+		handler.postDelayed(runnable, 10000);
+		
+	}*/
 
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
 		Log.i("OnCommand", "OnCreate");
 		new GetLoc().execute("http://pierrelt.fr/ITSMAP/getLocation.php?id="
 				+ Login.iduser);
-		return START_REDELIVER_INTENT;
+		
+		
+		/*final Handler handler = new Handler();
+		final Runnable runnable = new Runnable() {
+			@Override
+			public void run() {
+				Log.i("run", "OnCreate");
+				new GetLoc().execute("http://pierrelt.fr/ITSMAP/getLocation.php?id="
+						+ Login.iduser);
+			}
+		};
+		handler.postDelayed(runnable, 10000);*/
+		return START_STICKY;
 	}
 
 	public class GetLoc extends AsyncTask<String, String, String> {
+		
+		
 
 		@Override
 		protected void onPostExecute(String result) {
@@ -102,13 +137,13 @@ public class DisplayService extends Service {
 		//Log.i("start", "JSON FILLED");
 	}
 
-	public void onConnectionFailed(ConnectionResult arg0) {
+	/*public void onConnectionFailed(ConnectionResult arg0) {
 
-	}
+	}*/
 
-	public void onDisconnected() {
+	/*public void onDisconnected() {
 
-	}
+	}*/
 
 	@Override
 	public IBinder onBind(Intent intent) {

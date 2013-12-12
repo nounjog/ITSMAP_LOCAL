@@ -71,7 +71,12 @@
         <service
             android:name="com.example.itsmap.DisplayService"
             android:enabled="true"
-            android:exported="true">
+            android:exported="true" >
+        </service>
+        <service
+            android:name="com.example.itsmap.AddFriendService"
+            android:enabled="true"
+            android:exported="true" >
         </service>
     </application>
 

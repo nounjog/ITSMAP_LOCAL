@@ -37,7 +37,7 @@ public class AddFriendFragment extends Fragment {
 			Bundle savedInstanceState) {
 
 		View rootView = inflater.inflate(R.layout.fragment_addfriend, container, false);
-		new GetUser().execute("http://pierrelt.fr/ITSMAP/getUser.php");
+		new GetUser().execute("http://pierrelt.fr/ITSMAP/getUser.php?id="+Login.iduser);
 		return rootView;
 	}
 	

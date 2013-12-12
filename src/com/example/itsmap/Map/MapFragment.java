@@ -14,6 +14,7 @@ import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.protocol.HTTP;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.location.Location;
 import android.location.LocationManager;
@@ -56,24 +57,23 @@ public class MapFragment extends Fragment implements
 	private LocationClient lc;
 	public static Location location = null;
 	private static View view;
-	public static double lonuser=0;
-	public static double latuser=0;
-	
+	public static double lonuser = 0;
+	public static double latuser = 0;
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		Log.d(TAG, "onCreateView");
-		   if (view != null) {
-		        ViewGroup parent = (ViewGroup) view.getParent();
-		        if (parent != null)
-		            parent.removeView(view);
-		    }
-		   try {
-		 view = inflater.inflate(R.layout.fragment_map, container,
-				false);
-	} catch (InflateException e) {
-        /* map is already there, just return view as it is */
-    }
+		if (view != null) {
+			ViewGroup parent = (ViewGroup) view.getParent();
+			if (parent != null)
+				parent.removeView(view);
+		}
+		try {
+			view = inflater.inflate(R.layout.fragment_map, container, false);
+		} catch (InflateException e) {
+			/* map is already there, just return view as it is */
+		}
 
 		Log.i("start", "START");
 		return view;
@@ -92,7 +92,6 @@ public class MapFragment extends Fragment implements
 		mMap.getUiSettings().setMyLocationButtonEnabled(true);
 		mMap.getUiSettings().setZoomControlsEnabled(true);
 
-		
 		lr = LocationRequest.create();
 		lr.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
 		lc = new LocationClient(this.getActivity().getApplicationContext(),
@@ -100,7 +99,8 @@ public class MapFragment extends Fragment implements
 		lc.connect();
 		getActivity().startService(
 				new Intent(getActivity(), DisplayService.class));
-	final Handler handler = new Handler();
+
+		/*final Handler handler = new Handler();
 		final Runnable runnable = new Runnable() {
 			@Override
 			public void run() {
@@ -109,12 +109,10 @@ public class MapFragment extends Fragment implements
 				handler.postDelayed(this, 10000);
 			}
 		};
-		handler.postDelayed(runnable, 10000);
-
-	
+		handler.postDelayed(runnable, 10000);*/
 
 	}
-
+	
 	public void onLocationChanged(Location l2) {
 		CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(
 				new LatLng(l2.getLatitude(), l2.getLongitude()), 15);
@@ -125,8 +123,8 @@ public class MapFragment extends Fragment implements
 		mMap.animateCamera(cameraUpdate);
 
 		String id = Login.iduser;
-		latuser=lat;
-		lonuser=lon;
+		latuser = lat;
+		lonuser = lon;
 		doAddLocation(lat2, lon2, id);
 
 	}
@@ -199,22 +197,23 @@ public class MapFragment extends Fragment implements
 		Log.i("name", String.valueOf(name));
 		Log.i("timestamp", String.valueOf(timestamp));
 		double d = 0;
-	    Location locationA = new Location("A");
-	    locationA.setLatitude(latitude);
-	    locationA.setLongitude(longitude);
-	    Location locationB = new Location("B");
-	    locationB.setLatitude(latuser);
-	    locationB.setLongitude(lonuser);
-	    d = locationA.distanceTo(locationB);		
-		Log.i("start","D : "+String.valueOf(d));
-	//	Log.i("start","LON : "+String.valueOf(longitude));
+		Location locationA = new Location("A");
+		locationA.setLatitude(latitude);
+		locationA.setLongitude(longitude);
+		Location locationB = new Location("B");
+		locationB.setLatitude(latuser);
+		locationB.setLongitude(lonuser);
+		d = locationA.distanceTo(locationB);
+		Log.i("start", "D : " + String.valueOf(d));
+		// Log.i("start","LON : "+String.valueOf(longitude));
 
-		if (d < 500) { 
+		if (d < 500) {
 			mMap.addMarker(
-					new MarkerOptions().position(new LatLng(latitude, longitude))
-							.title(name)).setSnippet(timestamp);
-		    }
-	
+					new MarkerOptions().position(
+							new LatLng(latitude, longitude)).title(name))
+					.setSnippet(timestamp);
+		}
+
 	}
 
 	public void onConnectionFailed(ConnectionResult arg0) {
@@ -228,6 +227,46 @@ public class MapFragment extends Fragment implements
 
 	public void onDisconnected() {
 
+	}
+
+	@Override
+	public void onDestroy() {
+		Log.i("onDestroy", "OnCreate");
+		// TODO Auto-generated method stub
+		
+
+		super.onDestroy();
+	}
+
+	@Override
+	public void onPause() {
+		// TODO Auto-generated method stub
+		Log.i("onPause", "OnCreate");
+		
+		super.onPause();
+	}
+
+	@Override
+	public void onStop() {
+		// TODO Auto-generated method stub
+		Log.i("onStop", "OnCreate");
+		//getActivity().getSupportFragmentManager().popBackStack();
+
+		super.onStop();
+	}
+
+	@Override
+	public void onAttach(Activity activity) {
+		Log.i("onAttach", "OnCreate");
+		// TODO Auto-generated method stub
+		super.onAttach(activity);
+	}
+
+	@Override
+	public void onHiddenChanged(boolean hidden) {
+		Log.i("onHidden", "OnCreate");
+		// TODO Auto-generated method stub
+		super.onHiddenChanged(hidden);
 	}
 
 }
