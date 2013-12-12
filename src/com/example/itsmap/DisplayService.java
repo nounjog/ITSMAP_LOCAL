@@ -80,7 +80,7 @@ public class DisplayService extends Service {
 		try {
 			JSONArray jArray;
 			jArray = new JSONArray(o);
-			Log.i("start", String.valueOf(jArray.length()));
+		//	Log.i("start", String.valueOf(jArray.length()));
 
 			for (int i = 0; i < jArray.length(); i++) {
 				JSONObject tmp = (JSONObject) jArray.get(i);
@@ -90,7 +90,7 @@ public class DisplayService extends Service {
 				double lat = Double.parseDouble(tmp.get("latitude").toString());
 
 				String time = tmp.get("timestamp").toString();
-				Log.i("start", "AJOUT");
+				//Log.i("start", "AJOUT");
 
 				MapFragment.displayUsers(lat, lon, val, time);
 			}
@@ -99,7 +99,7 @@ public class DisplayService extends Service {
 			e.printStackTrace();
 		}
 
-		Log.i("start", "JSON FILLED");
+		//Log.i("start", "JSON FILLED");
 	}
 
 	public void onConnectionFailed(ConnectionResult arg0) {

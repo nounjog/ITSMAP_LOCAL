@@ -22,6 +22,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.support.v4.app.Fragment;
 import android.util.Log;
+import android.view.InflateException;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -54,16 +55,28 @@ public class MapFragment extends Fragment implements
 	private LocationRequest lr;
 	private LocationClient lc;
 	public static Location location = null;
-
+	private static View view;
+	public static double lonuser=0;
+	public static double latuser=0;
+	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		Log.d(TAG, "onCreateView");
-		View rootView = inflater.inflate(R.layout.fragment_map, container,
+		   if (view != null) {
+		        ViewGroup parent = (ViewGroup) view.getParent();
+		        if (parent != null)
+		            parent.removeView(view);
+		    }
+		   try {
+		 view = inflater.inflate(R.layout.fragment_map, container,
 				false);
+	} catch (InflateException e) {
+        /* map is already there, just return view as it is */
+    }
 
 		Log.i("start", "START");
-		return rootView;
+		return view;
 	}
 
 	@Override
@@ -79,6 +92,7 @@ public class MapFragment extends Fragment implements
 		mMap.getUiSettings().setMyLocationButtonEnabled(true);
 		mMap.getUiSettings().setZoomControlsEnabled(true);
 
+		
 		lr = LocationRequest.create();
 		lr.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
 		lc = new LocationClient(this.getActivity().getApplicationContext(),
@@ -86,21 +100,18 @@ public class MapFragment extends Fragment implements
 		lc.connect();
 		getActivity().startService(
 				new Intent(getActivity(), DisplayService.class));
-		final Handler handler = new Handler();
+	final Handler handler = new Handler();
 		final Runnable runnable = new Runnable() {
 			@Override
 			public void run() {
-				/* do what you need to do */
 				getActivity().startService(
 						new Intent(getActivity(), DisplayService.class));
-				/* and here comes the "trick" */
 				handler.postDelayed(this, 10000);
 			}
 		};
 		handler.postDelayed(runnable, 10000);
 
-		// getActivity().startService(new Intent(getActivity(),
-		// DisplayService.class));
+	
 
 	}
 
@@ -114,7 +125,8 @@ public class MapFragment extends Fragment implements
 		mMap.animateCamera(cameraUpdate);
 
 		String id = Login.iduser;
-
+		latuser=lat;
+		lonuser=lon;
 		doAddLocation(lat2, lon2, id);
 
 	}
@@ -179,17 +191,30 @@ public class MapFragment extends Fragment implements
 
 	}
 
-	public static void displayUsers(double longitude, double latitude,
+	public static void displayUsers(double latitude, double longitude,
 			String name, String timestamp) {
 		Log.i("DisplayUser", "OnCreate");
 		Log.i("longitude", String.valueOf(longitude));
 		Log.i("latitude", String.valueOf(latitude));
 		Log.i("name", String.valueOf(name));
 		Log.i("timestamp", String.valueOf(timestamp));
+		double d = 0;
+	    Location locationA = new Location("A");
+	    locationA.setLatitude(latitude);
+	    locationA.setLongitude(longitude);
+	    Location locationB = new Location("B");
+	    locationB.setLatitude(latuser);
+	    locationB.setLongitude(lonuser);
+	    d = locationA.distanceTo(locationB);		
+		Log.i("start","D : "+String.valueOf(d));
+	//	Log.i("start","LON : "+String.valueOf(longitude));
 
-		mMap.addMarker(
-				new MarkerOptions().position(new LatLng(longitude, latitude))
-						.title(name)).setSnippet(timestamp);
+		if (d < 500) { 
+			mMap.addMarker(
+					new MarkerOptions().position(new LatLng(latitude, longitude))
+							.title(name)).setSnippet(timestamp);
+		    }
+	
 	}
 
 	public void onConnectionFailed(ConnectionResult arg0) {

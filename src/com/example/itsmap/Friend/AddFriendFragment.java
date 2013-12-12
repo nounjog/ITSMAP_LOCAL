@@ -14,15 +14,20 @@ import org.json.JSONObject;
 
 import com.example.itsmap.R;
 import com.example.itsmap.R.layout;
+import com.example.itsmap.UserManager.Login;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 public class AddFriendFragment extends Fragment {
 
@@ -37,15 +42,17 @@ public class AddFriendFragment extends Fragment {
 	}
 	
 	public void fill(String result){
+		int[] idArray;
 	   	JSONArray jArray = null;
-			ArrayList<String> listdata = new ArrayList<String>();     
+			final ArrayList<String> listdata = new ArrayList<String>();     
 			try {
 				jArray = new JSONArray(result);
 				if (jArray != null) { 
+					idArray = new int[jArray.length()];
 				   for (int i=0;i<jArray.length();i++){ 
 						JSONObject tmp = (JSONObject) jArray.get(i);
 						String val = tmp.get("name").toString();
-				
+						idArray[i] = Integer.parseInt(tmp.get("id").toString());
 							listdata.add(val);
 					
 				   // listdata.add(tmp.getString("name"));
@@ -60,6 +67,21 @@ public class AddFriendFragment extends Fragment {
 			ListView lv = (ListView) getActivity().findViewById(R.id.list);			
 			ArrayAdapter<String> clear =null;
 			lv.setAdapter(clear);
+			   lv.setOnItemClickListener(new OnItemClickListener() {
+		            
+		          
+
+					@Override
+					public void onItemClick(AdapterView<?> parent, View view, int position,
+		                    long id) {
+		             String name = listdata.get(position);
+						// TODO Auto-generated method stub
+		             Log.i("start",name);
+		     		new AddFriend().execute("http://pierrelt.fr/ITSMAP/addFriend.php?id="+Login.iduser+"&name="+name);
+
+					}
+		        });
+			
 			ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(getActivity(),
 					android.R.layout.simple_list_item_1, listdata);
 			lv.setAdapter(arrayAdapter);
@@ -70,6 +92,41 @@ public class AddFriendFragment extends Fragment {
 		@Override
 		protected void onPostExecute(String result) {
 			fill(result);
+			super.onPostExecute(result);
+			// Log.i("start", result);
+		}
+
+		@Override
+		protected void onPreExecute() {
+			// TODO Auto-generated method stub
+			super.onPreExecute();
+		}
+
+		@Override
+		protected String doInBackground(String... params) {
+			try {
+				HttpClient httpclient = new DefaultHttpClient();
+				HttpGet method = new HttpGet(params[0]);
+				HttpResponse response = httpclient.execute(method);
+				HttpEntity entity = response.getEntity();
+				if (entity != null) {
+					return EntityUtils.toString(entity);
+				} else {
+					return "No string.";
+				}
+			} catch (Exception e) {
+				return "Network problem";
+			}
+
+		}
+	}
+	
+	public class AddFriend extends AsyncTask<String, String, String> {
+
+		@Override
+		protected void onPostExecute(String result) {
+			Log.i("start",result);
+			Toast.makeText(getActivity(), result, Toast.LENGTH_SHORT).show();
 			super.onPostExecute(result);
 			// Log.i("start", result);
 		}
