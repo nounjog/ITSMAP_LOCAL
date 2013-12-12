@@ -78,6 +78,12 @@
             android:enabled="true"
             android:exported="true" >
         </service>
+
+        <receiver
+            android:name="com.example.itsmap.NewFriendAround"
+            android:enabled="true"
+            android:exported="true" >
+        </receiver>
     </application>
 
 </manifest>
