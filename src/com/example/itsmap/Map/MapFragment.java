@@ -7,29 +7,18 @@ import java.util.List;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
-import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.protocol.HTTP;
-import org.apache.http.util.EntityUtils;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
-import android.content.BroadcastReceiver;
-import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
-import android.content.ServiceConnection;
 import android.location.Location;
 import android.location.LocationManager;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.IBinder;
+import android.os.Handler;
 import android.os.Looper;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -37,9 +26,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.itsmap.DisplayService;
 import com.example.itsmap.R;
-import com.example.itsmap.R.id;
-import com.example.itsmap.R.layout;
 import com.example.itsmap.UserManager.Login;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient;
@@ -60,12 +48,12 @@ public class MapFragment extends Fragment implements
 	private static final String TAG = "MapFragment";
 	private static final String UPDATE_URL = "http://pierrelt.fr/ITSMAP/location.php";
 	private static final String MAP_FRAGMENT_TAG = "map";
-	private GoogleMap mMap;
+	private static GoogleMap mMap;
 	private SupportMapFragment mMapFragment;
 	LocationManager lm;
 	private LocationRequest lr;
 	private LocationClient lc;
-
+	public static Location location = null;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -77,7 +65,6 @@ public class MapFragment extends Fragment implements
 		Log.i("start", "START");
 		return rootView;
 	}
-
 
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
@@ -92,21 +79,28 @@ public class MapFragment extends Fragment implements
 		mMap.getUiSettings().setMyLocationButtonEnabled(true);
 		mMap.getUiSettings().setZoomControlsEnabled(true);
 
-		/*
-		 * LatLng sydney = new LatLng(-33.867, 151.206);
-		 * 
-		 * mMap.setMyLocationEnabled(true);
-		 * mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney, 13));
-		 * 
-		 * mMap.addMarker(new MarkerOptions() .title("Sydney")
-		 * .snippet("The most populous city in Australia.") .position(sydney));
-		 */
-
 		lr = LocationRequest.create();
 		lr.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
 		lc = new LocationClient(this.getActivity().getApplicationContext(),
 				this, this);
 		lc.connect();
+		getActivity().startService(
+				new Intent(getActivity(), DisplayService.class));
+		final Handler handler = new Handler();
+		final Runnable runnable = new Runnable() {
+			@Override
+			public void run() {
+				/* do what you need to do */
+				getActivity().startService(
+						new Intent(getActivity(), DisplayService.class));
+				/* and here comes the "trick" */
+				handler.postDelayed(this, 10000);
+			}
+		};
+		handler.postDelayed(runnable, 10000);
+
+		// getActivity().startService(new Intent(getActivity(),
+		// DisplayService.class));
 
 	}
 
@@ -121,38 +115,8 @@ public class MapFragment extends Fragment implements
 
 		String id = Login.iduser;
 
-		new GetLoc()
-				.execute("http://pierrelt.fr/ITSMAP/getLocation.php?id="+Login.iduser);
-		// doAddLocation(lat2, lon2, id);
+		doAddLocation(lat2, lon2, id);
 
-		// displayUsers(lat, lon, id, "minuit");
-
-	}
-
-	public void fill(String o) {
-		try {
-			JSONArray jArray;
-			jArray = new JSONArray(o);
-Log.i("start",String.valueOf(jArray.length()));
-
-
-			for (int i = 0; i < jArray.length(); i++) {
-				JSONObject tmp = (JSONObject) jArray.get(i);
-				String val = tmp.get("name").toString();
-				double lon = Double
-						.parseDouble(tmp.get("longitude").toString());
-				double lat = Double.parseDouble(tmp.get("latitude").toString());
-
-				String time = tmp.get("timestamp").toString();
-			Log.i("start","AJOUT");
-				displayUsers(lat,lon,val,time);
-			}
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		Log.i("start", "JSON FILLED");
 	}
 
 	private void doAddLocation(final String latitude, final String longitude,
@@ -196,22 +160,6 @@ Log.i("start",String.valueOf(jArray.length()));
 					// On appelle une fonction définie plus bas pour traduire la
 					// réponse
 
-					/*
-					 * JSONArray jArray = new
-					 * JSONArray(Login.convertStreamToString(is)); JSONObject tm
-					 * = (JSONObject) jArray.get(0); tm.get("time").toString();
-					 * 
-					 * for (int i=1;i<jArray.length();i++){ JSONObject tmp =
-					 * (JSONObject) jArray.get(i); String val =
-					 * tmp.get("name").toString(); double lon =
-					 * Double.parseDouble(tmp.get("longitude").toString());
-					 * double lat =
-					 * Double.parseDouble(tmp.get("latitude").toString());
-					 * 
-					 * String time = "DANS LE FUTUR";
-					 * 
-					 * }
-					 */
 					is.close();
 
 					if (entity != null)
@@ -231,9 +179,13 @@ Log.i("start",String.valueOf(jArray.length()));
 
 	}
 
-
-	public void displayUsers(double longitude, double latitude, String name,
-			String timestamp) {
+	public static void displayUsers(double longitude, double latitude,
+			String name, String timestamp) {
+		Log.i("DisplayUser", "OnCreate");
+		Log.i("longitude", String.valueOf(longitude));
+		Log.i("latitude", String.valueOf(latitude));
+		Log.i("name", String.valueOf(name));
+		Log.i("timestamp", String.valueOf(timestamp));
 
 		mMap.addMarker(
 				new MarkerOptions().position(new LatLng(longitude, latitude))
@@ -251,40 +203,6 @@ Log.i("start",String.valueOf(jArray.length()));
 
 	public void onDisconnected() {
 
-	}
-
-	public class GetLoc extends AsyncTask<String, String, String> {
-
-		@Override
-		protected void onPostExecute(String result) {
-			fill(result);
-			super.onPostExecute(result);
-			// Log.i("start", result);
-		}
-
-		@Override
-		protected void onPreExecute() {
-			// TODO Auto-generated method stub
-			super.onPreExecute();
-		}
-
-		@Override
-		protected String doInBackground(String... params) {
-			try {
-				HttpClient httpclient = new DefaultHttpClient();
-				HttpGet method = new HttpGet(params[0]);
-				HttpResponse response = httpclient.execute(method);
-				HttpEntity entity = response.getEntity();
-				if (entity != null) {
-					return EntityUtils.toString(entity);
-				} else {
-					return "No string.";
-				}
-			} catch (Exception e) {
-				return "Network problem";
-			}
-
-		}
 	}
 
 }
