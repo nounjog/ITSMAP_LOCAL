@@ -37,7 +37,7 @@ public class Login extends Activity {
 	
 	public static String iduser="";
 
-	public ProgressDialog progressDialog;
+	public static ProgressDialog progressDialog;
 
 	private EditText UserEditText;
 
@@ -133,6 +133,8 @@ PassEditText.setText("thom");
 
 		// final String pw = md5(pass);
 		// Création d'un thread
+		progressDialog.dismiss();
+
 		Thread t = new Thread() {
 
 			public void run() {
