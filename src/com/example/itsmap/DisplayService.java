@@ -1,5 +1,7 @@
 package com.example.itsmap;
 
+import java.util.Calendar;
+
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -10,6 +12,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.app.AlarmManager;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -41,7 +44,13 @@ public class DisplayService extends Service {
 		super.onCreate();
 		Log.i("OnCommand", "OnCreate");
 		
-		
+		Intent intent = new Intent(this, DisplayService.class);
+		Calendar cal = Calendar.getInstance();
+		cal.setTimeInMillis(System.currentTimeMillis());
+		PendingIntent pintent = PendingIntent.getService(this, 0, intent, 0);
+		AlarmManager alarm = (AlarmManager) getSystemService(this.ALARM_SERVICE);
+		alarm.setRepeating(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(),
+				30 * 1000, pintent);
 		
 	}
 	
@@ -147,15 +156,18 @@ String curFriend ="";
 				double lon = Double
 						.parseDouble(tmp.get("longitude").toString());
 				double lat = Double.parseDouble(tmp.get("latitude").toString());
-				curFriend+=val+",";
-				if(!friendLast.contains(val+",")){
-					Log.i("SERVICE",val);
-				friends +=val+",";
-				} else{
-					//friendLast = friendLast+" "+val;
-				}
 				String time = tmp.get("timestamp").toString();
-				MapFragment.displayUsers(lat, lon, val, time,i);
+
+			
+				if(MapFragment.displayUsers(lat, lon, val, time,i)){
+					curFriend+=val+",";
+					if(!friendLast.contains(val+",")){
+						Log.i("SERVICE",val);
+					friends +=val+",";
+					} else{
+						//friendLast = friendLast+" "+val;
+					}
+				}
 			}
 			friendLast = curFriend;
 			this.sendNotification(this,friends);

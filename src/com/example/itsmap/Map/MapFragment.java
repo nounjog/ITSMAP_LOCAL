@@ -62,6 +62,7 @@ public class MapFragment extends Fragment implements
 	private static View view;
 	public static double lonuser = 0;
 	public static double latuser = 0;
+	private boolean start = true;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -106,8 +107,7 @@ public class MapFragment extends Fragment implements
 		final Runnable runnable = new Runnable() {
 			@Override
 			public void run() {
-				getActivity().startService(
-						new Intent(getActivity(), DisplayService.class));
+				
 				handler.postDelayed(this, 10000);
 			}
 		};
@@ -125,7 +125,12 @@ public class MapFragment extends Fragment implements
 		String lat2 = String.valueOf(lat);
 		String lon2 = String.valueOf(lon);
 		mMap.animateCamera(cameraUpdate);
+		if(start){
+		getActivity().startService(
+				new Intent(getActivity(), DisplayService.class));
+		start = false;
 
+		}
 		String id = Login.iduser;
 		latuser = lat;
 		lonuser = lon;
@@ -193,7 +198,7 @@ public class MapFragment extends Fragment implements
 
 	}
 
-	public static void displayUsers(double latitude, double longitude,
+	public static boolean displayUsers(double latitude, double longitude,
 			String name, String timestamp,int flag)
 	
 	{
@@ -222,7 +227,9 @@ public class MapFragment extends Fragment implements
 					new MarkerOptions().position(
 							new LatLng(latitude, longitude)).title(name))
 					.setSnippet(timestamp);
+			return true;
 		}
+		return false;
 
 	}
 

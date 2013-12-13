@@ -73,13 +73,7 @@ public class ContentActivity extends FragmentActivity implements
 
 	@Override
 	protected void onStart() {
-		Intent intent = new Intent(this, DisplayService.class);
-		Calendar cal = Calendar.getInstance();
-		cal.setTimeInMillis(System.currentTimeMillis());
-		PendingIntent pintent = PendingIntent.getService(this, 0, intent, 0);
-		AlarmManager alarm = (AlarmManager) getSystemService(this.ALARM_SERVICE);
-		alarm.setRepeating(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis()+3000,
-				30 * 1000, pintent);
+		
 	//	this.startService(new Intent(this, DisplayService.class));
 		Log.i("SERVICE","REGISTERED");
 		super.onStart();
