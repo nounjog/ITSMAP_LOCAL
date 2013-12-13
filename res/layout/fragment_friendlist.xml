@@ -14,11 +14,29 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" >
 
+            <TextView
+                android:id="@+id/text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Friend list"
+                android:textColor="#23337c"
+                android:textSize="32sp" />
+
             <ListView
                 android:id="@android:id/list"
                 android:layout_width="fill_parent"
                 android:layout_height="198px" >
             </ListView>
+
+            <TextView
+                android:id="@+id/text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Friend request"
+                android:textColor="#23337c"
+                android:textSize="32sp" />
 
             <ListView
                 android:id="@+id/list2"
