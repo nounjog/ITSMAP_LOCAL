@@ -2,6 +2,7 @@ package com.example.itsmap.Map;
 
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import org.apache.http.HttpEntity;
@@ -15,6 +16,8 @@ import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.protocol.HTTP;
 
 import android.app.Activity;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.location.Location;
 import android.location.LocationManager;
@@ -97,8 +100,7 @@ public class MapFragment extends Fragment implements
 		lc = new LocationClient(this.getActivity().getApplicationContext(),
 				this, this);
 		lc.connect();
-		getActivity().startService(
-				new Intent(getActivity(), DisplayService.class));
+		
 
 		/*final Handler handler = new Handler();
 		final Runnable runnable = new Runnable() {

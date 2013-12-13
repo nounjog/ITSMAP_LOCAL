@@ -73,6 +73,7 @@
             android:enabled="true"
             android:exported="true" >
         </service>
+        <receiver android:name="NewFriendAround" ></receiver>
         <service
             android:name="com.example.itsmap.AddFriendService"
             android:enabled="true"

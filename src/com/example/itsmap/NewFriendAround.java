@@ -15,11 +15,13 @@ import android.util.Log;
 public class NewFriendAround extends BroadcastReceiver {
 	public NewFriendAround() {
 	}
-//			registerReceiver(myBroadcastReceiver, new IntentFilter("update"));
-
 	@Override
 	public void onReceive(Context context, Intent intent) {
 Log.i("broadcast","RECEIVE");
+Intent dailyUpdater = new Intent(context, DisplayService.class);
+context.startService(dailyUpdater);
+
+
 NotificationCompat.Builder mBuilder =
 new NotificationCompat.Builder(context)
 .setContentTitle("My notification")

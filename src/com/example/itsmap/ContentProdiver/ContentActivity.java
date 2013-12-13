@@ -1,22 +1,28 @@
 package com.example.itsmap.ContentProdiver;
 
+import java.util.Calendar;
+
+import com.example.itsmap.DisplayService;
 import com.example.itsmap.R;
 import com.example.itsmap.R.id;
 import com.example.itsmap.R.layout;
 
 import android.annotation.SuppressLint;
 import android.app.ActionBar;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.app.ActionBar.Tab;
 import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
-
+import android.util.Log;
 
 @SuppressLint("NewApi")
-public class ContentActivity extends FragmentActivity 
-	implements ActionBar.TabListener {
-	
+public class ContentActivity extends FragmentActivity implements
+		ActionBar.TabListener {
+
 	private ViewPager viewPager;
 	private TabsPagerAdapter mAdapter;
 	private ActionBar actionBar;
@@ -35,7 +41,7 @@ public class ContentActivity extends FragmentActivity
 
 		viewPager.setAdapter(mAdapter);
 		actionBar.setHomeButtonEnabled(false);
-		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);		
+		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
 		// Adding Tabs
 		for (String tab_name : tabs) {
@@ -63,6 +69,20 @@ public class ContentActivity extends FragmentActivity
 			public void onPageScrollStateChanged(int arg0) {
 			}
 		});
+	}
+
+	@Override
+	protected void onStart() {
+		Intent intent = new Intent(this, DisplayService.class);
+		Calendar cal = Calendar.getInstance();
+		cal.setTimeInMillis(System.currentTimeMillis());
+		PendingIntent pintent = PendingIntent.getService(this, 0, intent, 0);
+		AlarmManager alarm = (AlarmManager) getSystemService(this.ALARM_SERVICE);
+		alarm.setRepeating(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis()+3000,
+				30 * 1000, pintent);
+	//	this.startService(new Intent(this, DisplayService.class));
+		Log.i("SERVICE","REGISTERED");
+		super.onStart();
 	}
 
 	@Override
