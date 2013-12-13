@@ -113,58 +113,7 @@ public class FriendsDataSource {
 		db.delete(MySQLiteOpenHelper.TABLE_FRIEND, MySQLiteOpenHelper.COLUMN_ID
 				+ " = " + id, null);
 
-		Thread t = new Thread() {
 
-			public void run() {
-
-				Looper.prepare();
-				// On se connecte au serveur afin de communiquer avec le PHP
-				DefaultHttpClient client = new DefaultHttpClient();
-				HttpConnectionParams.setConnectionTimeout(client.getParams(),
-						15000);
-
-				HttpResponse response;
-				HttpEntity entity;
-
-				try {
-					// On établit un lien avec le script PHP
-					HttpPost post = new HttpPost(UPDATE_URL);
-
-					List<NameValuePair> nvps = new ArrayList<NameValuePair>();
-
-					nvps.add(new BasicNameValuePair("id", Iduser));
-					nvps.add(new BasicNameValuePair("idf", Id));
-					nvps.add(new BasicNameValuePair("action", "deleteF"));
-					Log.i(Iduser, Id);
-					post.setHeader("Content-Type",
-							"application/x-www-form-urlencoded");
-					// On passe les paramètres login et password qui vont être
-					// récupérés
-					// par le script PHP en post
-					post.setEntity(new UrlEncodedFormEntity(nvps, HTTP.UTF_8));
-					// On récupère le résultat du script
-					response = client.execute(post);
-
-					entity = response.getEntity();
-
-					InputStream is = entity.getContent();
-					// On appelle une fonction définie plus bas pour traduire la
-					// réponse
-					is.close();
-
-					if (entity != null)
-						entity.consumeContent();
-
-				} catch (Exception e) {
-				}
-
-				Looper.loop();
-
-			}
-
-		};
-
-		t.start();
 	}
 
 	/**

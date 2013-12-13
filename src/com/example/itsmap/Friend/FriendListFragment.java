@@ -56,7 +56,7 @@ public class FriendListFragment extends ListFragment {
 	CustomAdapter adapter;
 	Friend friend;
 	int currentPosition;
-
+	public static String nameDel ="";
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -156,6 +156,7 @@ public class FriendListFragment extends ListFragment {
 						public boolean onItemLongClick(AdapterView<?> parent,
 								View view, int position, long id) {
 							currentPosition = position;
+
 							listDialog();
 							return true;
 						}
@@ -207,10 +208,13 @@ public class FriendListFragment extends ListFragment {
 		private final class OkOnClickListener implements
 				DialogInterface.OnClickListener {
 			public void onClick(DialogInterface dialog, int which) {
-				Toast.makeText(getActivity(), "Friend deleted",
-						Toast.LENGTH_LONG).show();
+				
+				
 				datasource.open();
 				friend = (Friend) getListAdapter().getItem(currentPosition);
+				String name = nameDel;
+				new Accept()
+				.execute("http://pierrelt.fr/ITSMAP/manageFriends.php?action=deleteF&id="+Login.iduser+"&name="+name);
 				datasource.deleteFriend(friend);
 				adapter.remove(friend);
 				datasource.close();
@@ -230,6 +234,37 @@ public class FriendListFragment extends ListFragment {
 		}
 	}
 
+	public class DeleteFriend extends AsyncTask<String, String, String> {
+
+		@Override
+		protected void onPostExecute(String result) {
+			super.onPostExecute(result);
+			Toast.makeText(getActivity(), result, Toast.LENGTH_LONG);
+		}
+
+		@Override
+		protected void onPreExecute() {
+			// TODO Auto-generated method stub
+			super.onPreExecute();
+		}
+
+		@Override
+		protected String doInBackground(String... params) {
+			try {
+				HttpClient httpclient = new DefaultHttpClient();
+				HttpGet method = new HttpGet(params[0]);
+				HttpResponse response = httpclient.execute(method);
+				HttpEntity entity = response.getEntity();
+				if (entity != null) {
+					return EntityUtils.toString(entity);
+				} else {
+					return "No string.";
+				}
+			} catch (Exception e) {
+				return "Network problem";
+			}
+		}
+	}
 	public class NewFriend extends AsyncTask<String, String, String> {
 
 		@Override
