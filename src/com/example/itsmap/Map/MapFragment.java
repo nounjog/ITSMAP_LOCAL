@@ -194,7 +194,13 @@ public class MapFragment extends Fragment implements
 	}
 
 	public static void displayUsers(double latitude, double longitude,
-			String name, String timestamp) {
+			String name, String timestamp,int flag)
+	
+	{
+		if(flag==0){
+			mMap.clear();
+		}
+		
 		Log.i("DisplayUser", "OnCreate");
 		Log.i("longitude", String.valueOf(longitude));
 		Log.i("latitude", String.valueOf(latitude));
