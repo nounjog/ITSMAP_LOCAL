@@ -1,4 +1,5 @@
 package com.example.itsmap.Friend;
+
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
@@ -45,6 +46,7 @@ import android.widget.ListView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.Toast;
+
 public class FriendListFragment extends ListFragment {
 	private static final String TAG = "FriendsListFragment";
 	public static final String DATA_UPDATED = "DATA_UPDATED";
@@ -54,6 +56,7 @@ public class FriendListFragment extends ListFragment {
 	CustomAdapter adapter;
 	Friend friend;
 	int currentPosition;
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -62,6 +65,7 @@ public class FriendListFragment extends ListFragment {
 				container, false);
 		return rootView;
 	}
+
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
@@ -72,6 +76,7 @@ public class FriendListFragment extends ListFragment {
 				.execute("http://pierrelt.fr/ITSMAP/getFriendRequest.php?id="
 						+ Login.iduser);
 	}
+
 	public class GetLoc extends AsyncTask<String, String, String> {
 		@Override
 		protected void onPostExecute(String result) {
@@ -80,11 +85,13 @@ public class FriendListFragment extends ListFragment {
 			super.onPostExecute(result);
 			// Log.i("start", result);
 		}
+
 		@Override
 		protected void onPreExecute() {
 			// TODO Auto-generated method stub
 			super.onPreExecute();
 		}
+
 		@Override
 		protected String doInBackground(String... params) {
 			Log.i("Background", "OnCreate");
@@ -102,6 +109,7 @@ public class FriendListFragment extends ListFragment {
 				return "Network problem";
 			}
 		}
+
 		public void fill(String o) {
 			Log.i("fill", "OnCreate");
 			Log.i("Result", o);
@@ -122,6 +130,7 @@ public class FriendListFragment extends ListFragment {
 			}
 			// Log.i("start", "JSON FILLED");
 		}
+
 		public void addFriend(String name, int id, int flag) {
 			datasource = new FriendsDataSource(getActivity()
 					.getApplicationContext());
@@ -152,6 +161,7 @@ public class FriendListFragment extends ListFragment {
 						}
 					});
 		}
+
 		/**
 		 * Shows dialog when ListView item is clicked for a long time.
 		 */
@@ -167,6 +177,7 @@ public class FriendListFragment extends ListFragment {
 			AlertDialog dialog = builder.create();
 			dialog.show();
 		}
+
 		/**
 		 * Dialog for deleting a friend
 		 */
@@ -179,6 +190,7 @@ public class FriendListFragment extends ListFragment {
 			AlertDialog dialog = builder.create();
 			dialog.show();
 		}
+
 		/**
 		 * Cancel button listener that does nothing.
 		 */
@@ -187,6 +199,7 @@ public class FriendListFragment extends ListFragment {
 			public void onClick(DialogInterface dialog, int which) {
 			}
 		}
+
 		/**
 		 * Button listener when deleting a friend in a dialog.
 		 * 
@@ -204,6 +217,7 @@ public class FriendListFragment extends ListFragment {
 				adapter.notifyDataSetChanged();
 			}
 		}
+
 		/**
 		 * Updates ListView.
 		 */
@@ -215,19 +229,22 @@ public class FriendListFragment extends ListFragment {
 			adapter.notifyDataSetChanged();
 		}
 	}
+
 	public class NewFriend extends AsyncTask<String, String, String> {
-		
+
 		@Override
 		protected void onPostExecute(String result) {
 			fill(result);
 			super.onPostExecute(result);
 			// Log.i("start", result);
 		}
+
 		@Override
 		protected void onPreExecute() {
 			// TODO Auto-generated method stub
 			super.onPreExecute();
 		}
+
 		@Override
 		protected String doInBackground(String... params) {
 			try {
@@ -245,7 +262,11 @@ public class FriendListFragment extends ListFragment {
 			}
 		}
 	}
+
+	public static String name = "";
+
 	public void fill(String result) {
+
 		int[] idArray;
 		JSONArray jArray = null;
 		final ArrayList<String> listdata = new ArrayList<String>();
@@ -272,22 +293,120 @@ public class FriendListFragment extends ListFragment {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
-				String name = listdata.get(position);
+				String Name = listdata.get(position);
+				name = Name;
+
 				// TODO Auto-generated method stub
 				Log.i("start", name);
 				// new
-				new Accept().execute("http://pierrelt.fr/ITSMAP/answerRequest.php?id="+Login.iduser+"&name="+name+"&action=acceptFR");
+				listDialog2();
 			}
 		});
 		ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
 				getActivity(), android.R.layout.simple_list_item_1, listdata);
 		lv.setAdapter(arrayAdapter);
 	}
+
+	public void listDialog2() {
+		String[] array = { "Delete" };
+		Builder builder = new AlertDialog.Builder(getActivity());
+		builder.setTitle("Actions");
+		builder.setItems(array, new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int position) {
+				AcceptDialog();
+			}
+		});
+		AlertDialog dialog = builder.create();
+		dialog.show();
+	}
+
+	/**
+	 * Dialog for deleting a friend
+	 */
+	public void AcceptDialog() {
+		Builder builder = new AlertDialog.Builder(getActivity());
+		builder.setMessage("Do you want to Accept this friend?");
+		builder.setCancelable(true);
+		builder.setNegativeButton("No", new CancelOnClickListener());
+		builder.setPositiveButton("Yes", new OkOnClickListener());
+		AlertDialog dialog = builder.create();
+		dialog.show();
+	}
+
+	/**
+	 * Cancel button listener that does nothing.
+	 */
+	private final class CancelOnClickListener implements
+			DialogInterface.OnClickListener {
+		public void onClick(DialogInterface dialog, int which) {
+			new Accept()
+			.execute("http://pierrelt.fr/ITSMAP/answerRequest.php?id="
+					+ Login.iduser + "&name=" + name
+					+ "&action=deleteFR");
+		}
+	}
+
+	/**
+	 * Button listener when deleting a friend in a dialog.
+	 * 
+	 */
+	private final class OkOnClickListener implements
+			DialogInterface.OnClickListener {
+		public void onClick(DialogInterface dialog, int which) {
+			Toast.makeText(getActivity(), "Friend Accepted", Toast.LENGTH_LONG)
+					.show();
+			new Accept()
+					.execute("http://pierrelt.fr/ITSMAP/answerRequest.php?id="
+							+ Login.iduser + "&name=" + name
+							+ "&action=acceptFR");
+		}
+	}
+	
+	public void updateListView2() {
+		
+	}
+
 	public class Accept extends AsyncTask<String, String, String> {
 
 		@Override
 		protected void onPostExecute(String result) {
-			Log.i("start",result);
+			Log.i("start", result);
+			Toast.makeText(getActivity(), result, Toast.LENGTH_SHORT).show();
+			super.onPostExecute(result);
+			// Log.i("start", result);
+		}
+
+		@Override
+		protected void onPreExecute() {
+			// TODO Auto-generated method stub
+			super.onPreExecute();
+		}
+
+		@Override
+		protected String doInBackground(String... params) {
+			try {
+				HttpClient httpclient = new DefaultHttpClient();
+				HttpGet method = new HttpGet(params[0]);
+				HttpResponse response = httpclient.execute(method);
+				HttpEntity entity = response.getEntity();
+				if (entity != null) {
+					return EntityUtils.toString(entity);
+				} else {
+					return "No string.";
+				}
+			} catch (Exception e) {
+				return "Network problem";
+			}
+
+		}
+
+	}
+
+	public class Delete extends AsyncTask<String, String, String> {
+
+		@Override
+		protected void onPostExecute(String result) {
+			Log.i("start", result);
 			Toast.makeText(getActivity(), result, Toast.LENGTH_SHORT).show();
 			super.onPostExecute(result);
 			// Log.i("start", result);
@@ -317,4 +436,4 @@ public class FriendListFragment extends ListFragment {
 
 		}
 	}
-	}
+}
