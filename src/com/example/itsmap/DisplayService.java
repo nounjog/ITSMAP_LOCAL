@@ -155,9 +155,8 @@ String curFriend ="";
 					//friendLast = friendLast+" "+val;
 				}
 				String time = tmp.get("timestamp").toString();
-				MapFragment.displayUsers(lat, lon, val, time);
+				MapFragment.displayUsers(lat, lon, val, time,i);
 			}
-			
 			friendLast = curFriend;
 			this.sendNotification(this,friends);
 

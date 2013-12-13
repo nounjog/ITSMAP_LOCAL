@@ -71,7 +71,6 @@ public class FriendListFragment extends ListFragment {
 
 	public class GetLoc extends AsyncTask<String, String, String> {
 
-		
 		@Override
 		protected void onPostExecute(String result) {
 			Log.i("GetLoc", "OnCreate");
@@ -108,7 +107,7 @@ public class FriendListFragment extends ListFragment {
 		public void fill(String o) {
 			Log.i("fill", "OnCreate");
 			Log.i("Result", o);
-			
+
 			try {
 				JSONArray jArray;
 				jArray = new JSONArray(o);
@@ -119,8 +118,7 @@ public class FriendListFragment extends ListFragment {
 					String val = tmp.get("name").toString();
 					int id = tmp.getInt("id");
 					Log.i("Nom", val);
-
-					addFriend(val, id);
+					addFriend(val, id, i);
 				}
 			} catch (JSONException e) {
 				// TODO Auto-generated catch block
@@ -130,12 +128,17 @@ public class FriendListFragment extends ListFragment {
 			// Log.i("start", "JSON FILLED");
 		}
 
-		public void addFriend(String name, int id) {
+		public void addFriend(String name, int id, int flag) {
 
 			datasource = new FriendsDataSource(getActivity()
 					.getApplicationContext());
-			datasource.open();
 
+			datasource.open();
+			if (flag == 0) {
+				datasource.db.delete(MySQLiteOpenHelper.TABLE_FRIEND, null,
+						null);
+
+			}
 			Log.d(TAG, "Getting all friends");
 			friendList = datasource.getAllFriends();
 			Log.d(TAG, "Gotten all friends");

@@ -28,13 +28,14 @@ import com.example.itsmap.UserManager.Login;
 public class FriendsDataSource {
 
 	// Database fields
-	private SQLiteDatabase db;
+	public SQLiteDatabase db;
 	private MySQLiteOpenHelper dbHelper;
 	private String[] allColumns = { MySQLiteOpenHelper.COLUMN_ID,
 			MySQLiteOpenHelper.COLUMN_NAME, MySQLiteOpenHelper.COLUMN_TIMESTAMP };
 
 	public FriendsDataSource(Context context) {
 		dbHelper = new MySQLiteOpenHelper(context);
+
 		//db.delete(MySQLiteOpenHelper.TABLE_FRIEND, null, null);
 	}
 
@@ -45,7 +46,6 @@ public class FriendsDataSource {
 	 */
 	public void open() throws SQLException {
 		db = dbHelper.getWritableDatabase();
-		//db.delete(MySQLiteOpenHelper.TABLE_FRIEND, null, null);
 
 	}
 
@@ -187,6 +187,7 @@ public class FriendsDataSource {
 		}
 
 		cursor.close();
+		
 		return friends;
 	}
 
