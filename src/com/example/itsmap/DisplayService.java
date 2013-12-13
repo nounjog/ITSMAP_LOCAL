@@ -26,6 +26,7 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
 
+import com.example.itsmap.ContentProdiver.ContentActivity;
 import com.example.itsmap.Map.MapFragment;
 import com.example.itsmap.UserManager.Login;
 import com.google.android.gms.common.ConnectionResult;
@@ -50,7 +51,7 @@ public class DisplayService extends Service {
 		PendingIntent pintent = PendingIntent.getService(this, 0, intent, 0);
 		AlarmManager alarm = (AlarmManager) getSystemService(this.ALARM_SERVICE);
 		alarm.setRepeating(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(),
-				30 * 1000, pintent);
+				300 * 1000, pintent);
 		
 	}
 	
@@ -93,7 +94,7 @@ public class DisplayService extends Service {
 	}
 	  private void sendNotification(Context context,String friends) {
 		  if(!friends.equals("")){
-	        Intent notificationIntent = new Intent(context, MapFragment.class);
+	        Intent notificationIntent = new Intent(context, ContentActivity.class);
 	        PendingIntent contentIntent = PendingIntent.getActivity(context, 0, notificationIntent, 0);
 	        NotificationManager notificationMgr = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 	        Notification notification =  new Notification(android.R.drawable.star_on, "Refresh", System.currentTimeMillis());

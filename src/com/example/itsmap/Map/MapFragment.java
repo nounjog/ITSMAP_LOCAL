@@ -30,6 +30,8 @@ import android.view.InflateException;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.Toast;
 
 import com.example.itsmap.DisplayService;
 import com.example.itsmap.R;
@@ -78,7 +80,16 @@ public class MapFragment extends Fragment implements
 		} catch (InflateException e) {
 			/* map is already there, just return view as it is */
 		}
+		Button button = (Button) view.findViewById(R.id.refresh);
+		// Création du listener du bouton cancel (on sort de l'appli)
+		button.setOnClickListener(new View.OnClickListener() {
 
+			public void onClick(View v) {
+				getActivity().startService(
+						new Intent(getActivity(), DisplayService.class));
+			}
+
+		});
 		Log.i("start", "START");
 		return view;
 	}
@@ -101,23 +112,23 @@ public class MapFragment extends Fragment implements
 		lc = new LocationClient(this.getActivity().getApplicationContext(),
 				this, this);
 		lc.connect();
-		
 
-		/*final Handler handler = new Handler();
-		final Runnable runnable = new Runnable() {
-			@Override
-			public void run() {
-				
-				handler.postDelayed(this, 10000);
-			}
-		};
-		handler.postDelayed(runnable, 10000);
-		
-		handler.removeCallbacks(runnable);*/
+		/*
+		 * final Handler handler = new Handler(); final Runnable runnable = new
+		 * Runnable() {
+		 * 
+		 * @Override public void run() {
+		 * 
+		 * handler.postDelayed(this, 10000); } }; handler.postDelayed(runnable,
+		 * 10000);
+		 * 
+		 * handler.removeCallbacks(runnable);
+		 */
 
 	}
-	
+
 	public void onLocationChanged(Location l2) {
+		Log.i("SERVICE", "LOCATION CHANGE");
 		CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(
 				new LatLng(l2.getLatitude(), l2.getLongitude()), 15);
 		double lat = l2.getLatitude();
@@ -125,11 +136,12 @@ public class MapFragment extends Fragment implements
 		String lat2 = String.valueOf(lat);
 		String lon2 = String.valueOf(lon);
 		mMap.animateCamera(cameraUpdate);
-		if(start){
-		getActivity().startService(
-				new Intent(getActivity(), DisplayService.class));
-		start = false;
-
+		if (start) {
+			if (getActivity() != null) {
+				getActivity().startService(
+						new Intent(getActivity(), DisplayService.class));
+				start = false;
+			}
 		}
 		String id = Login.iduser;
 		latuser = lat;
@@ -199,13 +211,13 @@ public class MapFragment extends Fragment implements
 	}
 
 	public static boolean displayUsers(double latitude, double longitude,
-			String name, String timestamp,int flag)
-	
+			String name, String timestamp, int flag)
+
 	{
-		if(flag==0){
+		if (flag == 0) {
 			mMap.clear();
 		}
-		
+
 		Log.i("DisplayUser", "OnCreate");
 		Log.i("longitude", String.valueOf(longitude));
 		Log.i("latitude", String.valueOf(latitude));
@@ -250,7 +262,6 @@ public class MapFragment extends Fragment implements
 	public void onDestroy() {
 		Log.i("onDestroy", "OnCreate");
 		// TODO Auto-generated method stub
-		
 
 		super.onDestroy();
 	}
@@ -259,16 +270,16 @@ public class MapFragment extends Fragment implements
 	public void onPause() {
 		// TODO Auto-generated method stub
 		Log.i("onPause", "OnCreate");
-		
+
 		super.onPause();
-		
+
 	}
 
 	@Override
 	public void onStop() {
 		// TODO Auto-generated method stub
 		Log.i("onStop", "OnCreate");
-		//getActivity().getSupportFragmentManager().popBackStack();
+		// getActivity().getSupportFragmentManager().popBackStack();
 
 		super.onStop();
 	}
