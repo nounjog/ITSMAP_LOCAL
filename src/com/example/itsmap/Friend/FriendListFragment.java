@@ -276,49 +276,45 @@ public class FriendListFragment extends ListFragment {
 				// TODO Auto-generated method stub
 				Log.i("start", name);
 				// new
-				run(name);
+				new Accept().execute("http://pierrelt.fr/ITSMAP/answerRequest.php?id="+Login.iduser+"&name="+name+"&action=acceptFR");
 			}
 		});
 		ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
 				getActivity(), android.R.layout.simple_list_item_1, listdata);
 		lv.setAdapter(arrayAdapter);
 	}
-			public void run(String name) {
-				
-				final String Iduser = Login.iduser;
-				final String UPDATE_URL = "http://pierrelt.fr/ITSMAP/answerRequest.php";
-				Looper.prepare();
-				// On se connecte au serveur afin de communiquer avec le PHP
-				DefaultHttpClient client = new DefaultHttpClient();
-				HttpConnectionParams.setConnectionTimeout(client.getParams(),
-						15000);
-				HttpResponse response;
-				HttpEntity entity;
-				try {
-					// On établit un lien avec le script PHP
-					HttpPost post = new HttpPost(UPDATE_URL);
-					List<NameValuePair> nvps = new ArrayList<NameValuePair>();
-					nvps.add(new BasicNameValuePair("id", Iduser));
-					nvps.add(new BasicNameValuePair("idf", name));
-					nvps.add(new BasicNameValuePair("action", "acceptFR"));
-					Log.i(Iduser, name);
-					post.setHeader("Content-Type",
-							"application/x-www-form-urlencoded");
-					// On passe les paramètres login et password qui vont être
-					// récupérés
-					// par le script PHP en post
-					post.setEntity(new UrlEncodedFormEntity(nvps, HTTP.UTF_8));
-					// On récupère le résultat du script
-					response = client.execute(post);
-					entity = response.getEntity();
-					InputStream is = entity.getContent();
-					// On appelle une fonction définie plus bas pour traduire la
-					// réponse
-					is.close();
-					if (entity != null)
-						entity.consumeContent();
-				} catch (Exception e) {
+	public class Accept extends AsyncTask<String, String, String> {
+
+		@Override
+		protected void onPostExecute(String result) {
+			Log.i("start",result);
+			Toast.makeText(getActivity(), result, Toast.LENGTH_SHORT).show();
+			super.onPostExecute(result);
+			// Log.i("start", result);
+		}
+
+		@Override
+		protected void onPreExecute() {
+			// TODO Auto-generated method stub
+			super.onPreExecute();
+		}
+
+		@Override
+		protected String doInBackground(String... params) {
+			try {
+				HttpClient httpclient = new DefaultHttpClient();
+				HttpGet method = new HttpGet(params[0]);
+				HttpResponse response = httpclient.execute(method);
+				HttpEntity entity = response.getEntity();
+				if (entity != null) {
+					return EntityUtils.toString(entity);
+				} else {
+					return "No string.";
 				}
-				Looper.loop();
+			} catch (Exception e) {
+				return "Network problem";
 			}
+
+		}
+	}
 	}
