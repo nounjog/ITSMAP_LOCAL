@@ -156,7 +156,7 @@ public class FriendListFragment extends ListFragment {
 						public boolean onItemLongClick(AdapterView<?> parent,
 								View view, int position, long id) {
 							currentPosition = position;
-
+nameDel = friendList.get(position).getName();
 							listDialog();
 							return true;
 						}
@@ -212,7 +212,8 @@ public class FriendListFragment extends ListFragment {
 				
 				datasource.open();
 				friend = (Friend) getListAdapter().getItem(currentPosition);
-				String name = nameDel;
+				String name = friend.getName();
+				Log.i("delete",name);
 				new Accept()
 				.execute("http://pierrelt.fr/ITSMAP/manageFriends.php?action=deleteF&id="+Login.iduser+"&name="+name);
 				datasource.deleteFriend(friend);
