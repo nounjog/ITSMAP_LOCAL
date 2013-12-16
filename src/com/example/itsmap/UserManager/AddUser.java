@@ -18,6 +18,7 @@ import com.example.itsmap.MainActivity;
 import com.example.itsmap.R;
 import com.example.itsmap.R.id;
 import com.example.itsmap.R.layout;
+import com.example.itsmap.ContentProdiver.ContentActivity;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -176,7 +177,7 @@ public class AddUser extends Activity {
 			Toast.makeText(getApplicationContext(), "Inscription success",
 					Toast.LENGTH_SHORT).show();
 
-			Intent intent = new Intent(AddUser.this, MainActivity.class);
+			Intent intent = new Intent(AddUser.this, ContentActivity.class);
 			startActivity(intent);
 
 		} else {

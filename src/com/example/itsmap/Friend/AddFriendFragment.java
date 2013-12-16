@@ -13,7 +13,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.example.itsmap.R;
-import com.example.itsmap.Friend.FriendListFragment.Accept;
 //import com.example.itsmap.Friend.FriendListFragment.CancelOnClickListener;
 //import com.example.itsmap.Friend.FriendListFragment.OkOnClickListener;
 import com.example.itsmap.R.layout;
@@ -45,6 +44,7 @@ public class AddFriendFragment extends Fragment {
 
 		View rootView = inflater.inflate(R.layout.fragment_addfriend,
 				container, false);
+		Log.i("AddFriend","onCreateView");
 		// new
 		// GetUser().execute("http://pierrelt.fr/ITSMAP/getUser.php?id="+Login.iduser);
 		return rootView;
@@ -54,6 +54,7 @@ public class AddFriendFragment extends Fragment {
 	public void onActivityCreated(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onActivityCreated(savedInstanceState);
+		Log.i("AddFriend","onActivitycreated");
 	}
 
 	public static String name = "";
@@ -75,12 +76,11 @@ public class AddFriendFragment extends Fragment {
 					// listdata.add(tmp.getString("name"));
 				}
 			}
-
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
+if(getActivity()!=null){
 		ListView lv = (ListView) getActivity().findViewById(R.id.list);
 		ArrayAdapter<String> clear = null;
 		lv.setAdapter(clear);
@@ -101,6 +101,8 @@ public class AddFriendFragment extends Fragment {
 		ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
 				getActivity(), android.R.layout.simple_list_item_1, listdata);
 		lv.setAdapter(arrayAdapter);
+		Log.i("AddFriend","fill method");
+}
 	}
 
 	public void listDialog3() {
@@ -199,6 +201,8 @@ public class AddFriendFragment extends Fragment {
 			Log.i("start", result);
 			Toast.makeText(getActivity(), result, Toast.LENGTH_SHORT).show();
 			super.onPostExecute(result);
+			new GetUser().execute("http://pierrelt.fr/ITSMAP/getUser.php?id="
+					+ Login.iduser);
 			// Log.i("start", result);
 		}
 

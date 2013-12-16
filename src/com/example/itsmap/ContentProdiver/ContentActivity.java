@@ -58,6 +58,7 @@ public class ContentActivity extends FragmentActivity implements
 			public void onPageSelected(int position) {
 				// on changing the page
 				// make respected tab selected
+				Log.i("OnPageSelected",String.valueOf(position));
 				actionBar.setSelectedNavigationItem(position);
 			}
 
@@ -87,6 +88,7 @@ public class ContentActivity extends FragmentActivity implements
 	public void onTabSelected(Tab tab, FragmentTransaction ft) {
 		// on tab selected
 		// show respected fragment view
+		Log.i("OntabSelected",String.valueOf(tab.getPosition()));
 		viewPager.setCurrentItem(tab.getPosition());
 	}
 

@@ -99,7 +99,7 @@ public class DisplayService extends Service {
 	        NotificationManager notificationMgr = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 	        Notification notification =  new Notification(android.R.drawable.star_on, "Refresh", System.currentTimeMillis());
 	        notification.flags |= Notification.FLAG_AUTO_CANCEL;
-	        notification.setLatestEventInfo(context, "TA MERE",friends+" a proximité de vous.", contentIntent);
+	        notification.setLatestEventInfo(context, "New friend around",friends+" is around you!", contentIntent);
 	        notificationMgr.notify(0, notification);}
 	     }
 

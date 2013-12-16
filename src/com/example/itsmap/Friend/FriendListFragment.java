@@ -11,9 +11,7 @@ import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.params.HttpConnectionParams;
-import org.apache.http.protocol.HTTP;
+
 import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -21,11 +19,7 @@ import org.json.JSONObject;
 import com.example.itsmap.MySQLiteOpenHelper;
 import com.example.itsmap.R;
 import com.example.itsmap.ContentProdiver.CustomAdapter;
-import com.example.itsmap.DisplayService.GetLoc;
-import com.example.itsmap.Friend.AddFriendFragment.AddFriend;
-import com.example.itsmap.Friend.AddFriendFragment.GetUser;
-import com.example.itsmap.Map.MapFragment;
-import com.example.itsmap.R.layout;
+
 import com.example.itsmap.UserManager.Login;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
@@ -70,12 +64,17 @@ public class FriendListFragment extends ListFragment {
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 		Log.d(TAG, "onActivityCreated");
-		new GetLoc().execute("http://pierrelt.fr/ITSMAP/getFriends.php?id="
-				+ Login.iduser);
-		new NewFriend()
-				.execute("http://pierrelt.fr/ITSMAP/getFriendRequest.php?id="
-						+ Login.iduser);
+		fill();
+	
 	}
+public void fill(){
+	
+	new GetLoc().execute("http://pierrelt.fr/ITSMAP/getFriends.php?id="
+			+ Login.iduser);
+	new NewFriend()
+			.execute("http://pierrelt.fr/ITSMAP/getFriendRequest.php?id="
+					+ Login.iduser);
+}
 
 	public class GetLoc extends AsyncTask<String, String, String> {
 		@Override
@@ -241,6 +240,7 @@ nameDel = friendList.get(position).getName();
 		protected void onPostExecute(String result) {
 			super.onPostExecute(result);
 			Toast.makeText(getActivity(), result, Toast.LENGTH_LONG);
+			fill();
 		}
 
 		@Override
@@ -344,7 +344,7 @@ nameDel = friendList.get(position).getName();
 	}
 
 	public void listDialog2() {
-		String[] array = { "Delete" };
+		String[] array = { "Accept" };
 		Builder builder = new AlertDialog.Builder(getActivity());
 		builder.setTitle("Actions");
 		builder.setItems(array, new DialogInterface.OnClickListener() {
@@ -389,8 +389,8 @@ nameDel = friendList.get(position).getName();
 	private final class OkOnClickListener implements
 			DialogInterface.OnClickListener {
 		public void onClick(DialogInterface dialog, int which) {
-			Toast.makeText(getActivity(), "Friend Accepted", Toast.LENGTH_LONG)
-					.show();
+			/*Toast.makeText(getActivity(), "Friend Accepted", Toast.LENGTH_LONG)
+					.show();*/
 			new Accept()
 					.execute("http://pierrelt.fr/ITSMAP/answerRequest.php?id="
 							+ Login.iduser + "&name=" + name
@@ -409,8 +409,8 @@ nameDel = friendList.get(position).getName();
 			Log.i("start", result);
 			Toast.makeText(getActivity(), result, Toast.LENGTH_SHORT).show();
 			super.onPostExecute(result);
-			// Log.i("start", result);
-		}
+fill();
+}
 
 		@Override
 		protected void onPreExecute() {

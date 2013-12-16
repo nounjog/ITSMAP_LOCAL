@@ -4,10 +4,6 @@
     android:layout_height="fill_parent"
     android:orientation="vertical" >
 
-    <ScrollView
-        android:id="@+id/ScrollView01"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" >
 
         <TableLayout
             android:id="@+id/TableLayout01"
@@ -24,7 +20,7 @@
             <ListView
                 android:id="@android:id/list"
                 android:layout_width="fill_parent"
-                android:layout_height="198px" >
+                android:layout_height="400px" >
             </ListView>
             <TextView
                 android:id="@+id/text"
@@ -37,9 +33,9 @@
             <ListView
                 android:id="@+id/list2"
                 android:layout_width="192px"
-                android:layout_height="215px" >
+                android:layout_height="400px" >
             </ListView>
         </TableLayout>
-    </ScrollView>
+    
 
 </LinearLayout>

@@ -90,7 +90,6 @@ public class MapFragment extends Fragment implements
 			}
 
 		});
-		Log.i("start", "START");
 		return view;
 	}
 
@@ -218,11 +217,6 @@ public class MapFragment extends Fragment implements
 			mMap.clear();
 		}
 
-		Log.i("DisplayUser", "OnCreate");
-		Log.i("longitude", String.valueOf(longitude));
-		Log.i("latitude", String.valueOf(latitude));
-		Log.i("name", String.valueOf(name));
-		Log.i("timestamp", String.valueOf(timestamp));
 		double d = 0;
 		Location locationA = new Location("A");
 		locationA.setLatitude(latitude);
@@ -231,7 +225,6 @@ public class MapFragment extends Fragment implements
 		locationB.setLatitude(latuser);
 		locationB.setLongitude(lonuser);
 		d = locationA.distanceTo(locationB);
-		Log.i("start", "D : " + String.valueOf(d));
 		// Log.i("start","LON : "+String.valueOf(longitude));
 
 		if (d < 500) {
@@ -260,7 +253,7 @@ public class MapFragment extends Fragment implements
 
 	@Override
 	public void onDestroy() {
-		Log.i("onDestroy", "OnCreate");
+		Log.i("onDestroy", "MapFragment");
 		// TODO Auto-generated method stub
 
 		super.onDestroy();
@@ -286,7 +279,7 @@ public class MapFragment extends Fragment implements
 
 	@Override
 	public void onAttach(Activity activity) {
-		Log.i("onAttach", "OnCreate");
+		Log.i("onAttach", "MAPFRAGMENT");
 		// TODO Auto-generated method stub
 		super.onAttach(activity);
 	}
